@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ algorithm_name }} Visualization</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+            text-align:center;
+            padding:30px;
+        }
+
+        h1{
+            color:#2c3e50;
+        }
+
+        #container{
+            min-height:150px;
+            display:flex;
+            justify-content:flex-start;
+            align-items:center;
+            gap:25px;
+            margin-top:40px;
+            min-width:max-content;
+        }
+
+        .main-container{
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+            gap:25px;
+            margin-top:30px;
+            max-width:1800px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+
+        .info-panel{
+            width:300px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            text-align:left;
+        }
+
+        .visualization-panel{
+
+            width:700px;
+
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+
+            overflow-x:auto;
+        }
+
+        .ai-panel{
+
+            width:350px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.1);
+
+        }
+
+        .ai-panel h2{
+
+            text-align:center;
+            margin-bottom:20px;
+
+        }
+
+        .ai-panel #chatMessages{
+
+            height:350px;
+            overflow-y:auto;
+            border:1px solid #ccc;
+            padding:10px;
+            margin-bottom:15px;
+
+        }
+
+        .ai-panel input{
+            
+            width:100%;
+            padding:10px;
+            margin-bottom:10px;
+
+        }
+
+        .ai-panel button{
+
+            width:100%;
+
+        }
+
+        .controls{
+            margin-top:20px;
+        }
+
+        .node{
+            width:80px;
+            height:80px;
+
+            border-radius:50%;
+            background:#3498db;
+            color:white;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            font-size:24px;
+            font-weight:bold;
+
+            border:4px solid transparent;
+
+            box-shadow:0 4px 10px rgba(0,0,0,0.2);
+
+            transition:
+                transform 1.5s ease,
+                border 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .binary-mid{
+            border:4px solid orange !important;
+            transform:scale(1.15);
+            box-shadow:
+            0 0 20px orange;
+        }
+
+        .node-container{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+
+        .index-label{
+            margin-top:8px;
+            font-weight:bold;
+            color:#555;
+        }
+
+        button{
+            padding:10px 20px;
+            font-size:16px;
+            margin:5px;
+            border:none;
+            cursor:pointer;
+            background:#2c3e50;
+            border-radius:5px;
+            color:white;
+        }
+
+        .dark-mode{
+            background:#1e1e1e;
+            color:white;
+        }
+
+        .dark-mode .info-panel{
+            background:#2d2d2d;
+            color:white;
+        }
+
+        .dark-mode .visualization-panel{
+            background:#2d2d2d;
+            color:white;
+        }
+
+        .dark-mode .index-label{
+            color:#ddd;
+        }
+
+        .dark-mode a{
+            color:#4da3ff;
+        }
+
+        .pseudo-container{
+
+        background:white;
+        padding:20px;
+        margin-top:30px;
+        border-radius:10px;
+
+        }
+
+        .theory-container{
+
+            background:white;
+            padding:20px;
+            margin-top:30px;
+            border-radius:10px;
+            text-align:left;
+
+        }
+
+        .theory-container h3{
+
+            color:#2c3e50;
+            margin-top:20px;
+
+        }
+
+        .theory-container p{
+
+            line-height:1.7;
+
+        }
+
+
+        pre{
+
+            background:#222;
+            color:white;
+
+            padding:20px;
+
+            border-radius:10px;
+
+            text-align:left;
+
+            overflow-x:auto;
+
+        }
+
+        .chat-container{
+
+            width:380px;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.1);
+
+        }
+
+        .chat-container h2{
+
+            text-align:center;
+            margin-bottom:20px;
+
+        }
+
+        .chat-container #chatMessages{
+
+            height:350px;
+            overflow-y:auto;
+            border:1px solid #ccc;
+            padding:10px;
+            margin-bottom:15px;
+
+        }
+
+        .chat-container input{
+
+            width:100%;
+            padding:10px;
+
+        }
+
+        .chat-container button{
+
+            width:100%;
+            margin-top:10px;
+
+        }
+
+
+        #chatMessages{
+
+            height:200px;
+            overflow-y:auto;
+            border:1px solid #ccc;
+            padding:10px;
+            text-align:left;
+
+        }
+
+        .dark-mode h1,
+        .dark-mode h2,
+        .dark-mode h3{
+            color:white;
+        }
+
+        .dark-mode strong{
+            color:white;
+        }
+
+        .dark-mode .pseudo-container{
+            background:#2d2d2d;
+            color:white;
+        }
+
+        .dark-mode .theory-container{
+
+            background:#2d2d2d;
+            color:white;
+
+        }
+
+        .dark-mode .chat-container{
+            background:#2d2d2d;
+            color:white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<button
+    id="themeToggle"
+    style="
+        position:absolute;
+        top:20px;
+        right:20px;
+        padding:10px 15px;
+    "
+>
+    🌙 Dark Mode
+</button>
+
+<h1>{{ algorithm_name }} Visualization</h1>
+
+<div class="main-container">
+
+    <div class="info-panel">
+
+        <h2>Algorithm Information</h2>
+
+        <p><strong>Algorithm:</strong> {{ algorithm_name }}</p>
+
+        <p><strong>Best Case:</strong> {{ best_case }}</p>
+
+        <p><strong>Average Case:</strong> {{ average_case }}</p>
+
+        <p><strong>Worst Case:</strong> {{ worst_case }}</p>
+
+        <p><strong>Space Complexity:</strong> {{ space_complexity }}</p>
+
+        <hr>
+
+        <h3 id="stepCounter">
+            Step: 0
+        </h3>
+
+        <div
+            style="
+                width:100%;
+                height:20px;
+                background:#ddd;
+                border-radius:10px;
+                overflow:hidden;
+                margin-top:10px;
+            "
+        >
+
+            <div
+                id="progressBar"
+                style="
+                    width:0%;
+                    height:100%;
+                    background:#27ae60;
+                    transition:width 0.5s ease;
+                "
+            ></div>
+
+        </div>
+
+        <p id="progressText">
+            0%
+        </p>
+
+        <p id="statusText">
+            Waiting...
+        </p>
+
+        <hr>
+
+        <h3>Current Array</h3>
+
+        <p id="arrayDisplay">
+            []
+        </p>
+
+        <hr>
+
+        <h3 id="dynamicTitle">
+            Sorted Elements
+        </h3>
+
+        <p id="sortedCount">
+            0
+        </p>
+
+        <hr>
+
+        <h3 id="statsTitle">
+            Statistics
+        </h3>
+
+
+        <div id="sortingStats">
+
+            <p>
+                Comparisons:
+                <span id="comparisonCount">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Swaps:
+                <span id="swapCount">
+                    0
+                </span>
+            </p>
+
+        </div>
+
+        <div id="searchStats" style="display:none;">
+
+
+    <p>
+        Checks:
+        <span id="checkCount">
+            0
+        </span>
+    </p>
+
+
+    <div id="binaryInfo" style="display:none;">
+
+            <p>
+                Left:
+                <span id="leftValue">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Right:
+                <span id="rightValue">
+                    0
+                </span>
+            </p>
+
+            <p>
+                Middle:
+                <span id="midValue">
+                    0
+                </span>
+            </p>
+
+
+        </div>
+
+        <p>
+            Result:
+            <span id="searchResult">
+                -
+            </span>
+        </p>
+
+
+    </div>
+
+    </div>
+
+    <div class="visualization-panel">
+
+        <div id="container"></div>
+
+        <div class="controls">
+
+            <label>
+                <strong>Animation Speed</strong>
+            </label>
+
+            <br><br>
+
+            <input
+                type="range"
+                id="speedSlider"
+                min="100"
+                max="2000"
+                value="1000"
+                step="100"
+            >
+
+            <span id="speedValue">
+                Normal
+            </span>
+
+            <br><br>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                width:250px;
+                margin:auto;
+            ">
+                <span>Slow</span>
+                <span>Fast</span>
+            </div>
+
+            <br><br>
+
+            <button onclick="startVisualization()">
+                Start
+            </button>
+
+            <button onclick="pauseVisualization()">
+                Pause
+            </button>
+
+            <button onclick="resetVisualization()">
+                Reset
+            </button>
+
+        </div>
+
+    </div> <!-- visualization panel -->
+
+    <div class="chat-container">
+
+        <h2>AI Algorithm Assistant</h2>
+
+        <div id="chatMessages">
+
+            <p>AI: Ask me anything about this algorithm.</p>
+
+        </div>
+
+        <br>
+
+        <input
+            type="text"
+            id="userQuestion"
+            placeholder="Ask your doubt..."
+            style="width:100%; padding:10px;">
+
+        <br><br>
+
+        <button onclick="askAI()">
+            Ask
+        </button>
+
+    </div>
+
+</div>
+
+<br>
+
+<div style="text-align:center;">
+    <a href="/">← Back</a>
+</div>
+
+<hr>
+
+<div class="pseudo-container">
+
+<h2>Algorithm Pseudocode</h2>
+
+<pre id="pseudoCode">
+Loading...
+</pre>
+
+</div>
+
+<hr>
+
+<div class="theory-container">
+
+    <h2>Algorithm Theory</h2>
+
+    <div id="theoryContent"></div>
+
+</div>
+
+<script>
+
+const steps = {{ steps|tojson|safe }};
+
+const container = document.getElementById("container");
+
+const stepCounter =
+    document.getElementById("stepCounter");
+
+const arrayDisplay =
+    document.getElementById("arrayDisplay");
+
+const sortedCount =
+    document.getElementById("sortedCount");
+
+const sortedTitle =
+    document.querySelector(".info-panel h3:nth-of-type(3)");
+
+const dynamicTitle =
+    document.getElementById("dynamicTitle");
+
+const comparisonCount =
+    document.getElementById("comparisonCount");
+
+const swapCount =
+    document.getElementById("swapCount");
+
+const statsTitle =
+    document.getElementById("statsTitle");
+
+const sortingStats =
+    document.getElementById("sortingStats");
+
+const searchStats =
+    document.getElementById("searchStats");
+
+const checkCount =
+    document.getElementById("checkCount");
+
+const searchResult =
+    document.getElementById("searchResult");
+
+const binaryInfo =
+    document.getElementById("binaryInfo");
+
+const algorithmName =
+    "{{ algorithm_name }}";
+
+const pseudoCode =
+document.getElementById("pseudoCode");
+
+const theoryContent =
+document.getElementById("theoryContent");
+
+
+const pseudoCodes = {
+
+
+"Bubble Sort": `
+
+BubbleSort(array)
+
+1. Repeat for i = 0 to n-1
+
+2. Compare adjacent elements
+
+3. If left element > right element
+
+       Swap them
+
+4. Continue until array is sorted
+
+5. Return sorted array
+
+`,
+
+
+"Selection Sort": `
+
+SelectionSort(array)
+
+1. Start from first position
+
+2. Find smallest element in remaining array
+
+3. Swap it with current position
+
+4. Move to next position
+
+5. Repeat until sorted
+
+`,
+
+
+"Insertion Sort": `
+
+InsertionSort(array)
+
+1. Assume first element is sorted
+
+2. Pick next element
+
+3. Compare with previous elements
+
+4. Insert at correct position
+
+5. Repeat until complete
+
+`,
+
+
+"Merge Sort": `
+
+MergeSort(array)
+
+1. Divide array into two halves
+
+2. Recursively sort both halves
+
+3. Merge sorted halves
+
+4. Return sorted array
+
+`,
+
+
+"Quick Sort": `
+
+QuickSort(array)
+
+1. Select pivot element
+
+2. Partition array around pivot
+
+3. Elements smaller go left
+
+4. Elements larger go right
+
+5. Recursively sort partitions
+
+`,
+
+
+"Linear Search": `
+
+LinearSearch(array,target)
+
+1. Start from first element
+
+2. Compare element with target
+
+3. If match found
+
+       Return index
+
+4. Continue until end
+
+5. Element not found
+
+`,
+
+
+"Binary Search": `
+
+BinarySearch(array,target)
+
+1. Set left = 0
+
+2. Set right = array.length-1
+
+3. Find middle element
+
+4. If middle == target
+
+       Return index
+
+5. If target is smaller
+
+       Search left half
+
+6. Else
+
+       Search right half
+
+7. Repeat until found
+
+`
+
+};
+
+const theory = {
+
+"Bubble Sort":`
+
+<h3>Overview</h3>
+
+<p>
+Bubble Sort is one of the simplest sorting algorithms.
+It repeatedly compares adjacent elements and swaps them if they are in the wrong order.
+After every pass, the largest unsorted element moves to its correct position.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Bubble Sort repeatedly scans the array from left to right.
+Whenever two neighbouring elements are in the wrong order, they are swapped.
+This process continues until the array becomes completely sorted.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(n)</li>
+<li>Average Case : O(n²)</li>
+<li>Worst Case : O(n²)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(1)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Very easy to understand</li>
+<li>Simple implementation</li>
+<li>Works well for very small datasets</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Very slow for large arrays</li>
+<li>Performs many unnecessary swaps</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Teaching sorting concepts</li>
+<li>Small datasets</li>
+<li>Academic demonstrations</li>
+</ul>
+
+`,
+
+"Selection Sort":`
+
+<h3>Overview</h3>
+
+<p>
+Selection Sort repeatedly selects the smallest element from the unsorted portion of the array and places it at the correct position.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+The algorithm divides the array into sorted and unsorted parts. During each pass, it finds the minimum element from the unsorted part and swaps it with the first unsorted element.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(n²)</li>
+<li>Average Case : O(n²)</li>
+<li>Worst Case : O(n²)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(1)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Simple implementation</li>
+<li>Performs fewer swaps than Bubble Sort</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Poor performance on large datasets</li>
+<li>Not stable</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Small datasets</li>
+<li>Educational purposes</li>
+</ul>
+
+`,
+
+"Insertion Sort":`
+
+<h3>Overview</h3>
+
+<p>
+Insertion Sort builds the sorted array one element at a time by inserting each element into its correct position.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Starting from the second element, compare it with previous elements and insert it into the correct location.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(n)</li>
+<li>Average Case : O(n²)</li>
+<li>Worst Case : O(n²)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(1)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Efficient for nearly sorted arrays</li>
+<li>Stable sorting algorithm</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Slow for large datasets</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Nearly sorted data</li>
+<li>Small datasets</li>
+</ul>
+
+`,
+
+"Merge Sort":`
+
+<h3>Overview</h3>
+
+<p>
+Merge Sort is a Divide and Conquer algorithm that recursively divides the array and merges the sorted halves.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Split the array into halves until only one element remains. Merge the smaller sorted arrays into larger sorted arrays.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(n log n)</li>
+<li>Average Case : O(n log n)</li>
+<li>Worst Case : O(n log n)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(n)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Very efficient</li>
+<li>Stable sorting algorithm</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Requires extra memory</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Large datasets</li>
+<li>External sorting</li>
+</ul>
+
+`,
+
+"Quick Sort":`
+
+<h3>Overview</h3>
+
+<p>
+Quick Sort is a Divide and Conquer algorithm that partitions the array around a pivot element.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Choose a pivot, place smaller elements on the left and larger elements on the right, then recursively sort both partitions.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(n log n)</li>
+<li>Average Case : O(n log n)</li>
+<li>Worst Case : O(n²)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(log n)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Very fast in practice</li>
+<li>In-place sorting</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Worst case is O(n²)</li>
+<li>Not stable</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>General-purpose sorting</li>
+<li>Large datasets</li>
+</ul>
+
+`,
+
+"Linear Search":`
+
+<h3>Overview</h3>
+
+<p>
+Linear Search checks each element one by one until the target is found or the array ends.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Start from the first element and compare every element with the target until a match is found.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(1)</li>
+<li>Average Case : O(n)</li>
+<li>Worst Case : O(n)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(1)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Very simple</li>
+<li>Works on unsorted arrays</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Slow for large datasets</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Small datasets</li>
+<li>Unsorted collections</li>
+</ul>
+
+`,
+
+"Binary Search":`
+
+<h3>Overview</h3>
+
+<p>
+Binary Search efficiently finds an element in a sorted array by repeatedly dividing the search space into half.
+</p>
+
+<h3>Working Principle</h3>
+
+<p>
+Compare the target with the middle element. If smaller, search the left half. If larger, search the right half. Repeat until found.
+</p>
+
+<h3>Time Complexity</h3>
+
+<ul>
+<li>Best Case : O(1)</li>
+<li>Average Case : O(log n)</li>
+<li>Worst Case : O(log n)</li>
+</ul>
+
+<h3>Space Complexity</h3>
+
+<p>O(1)</p>
+
+<h3>Advantages</h3>
+
+<ul>
+<li>Very fast</li>
+<li>Excellent for large sorted datasets</li>
+</ul>
+
+<h3>Disadvantages</h3>
+
+<ul>
+<li>Requires sorted data</li>
+</ul>
+
+<h3>Applications</h3>
+
+<ul>
+<li>Database indexing</li>
+<li>Searching in sorted arrays</li>
+<li>Dictionary lookup</li>
+</ul>
+
+`,
+
+};
+
+
+pseudoCode.innerText =
+pseudoCodes[algorithmName];
+
+theoryContent.innerHTML =
+theory[algorithmName] || "<p>Theory coming soon...</p>";
+
+const leftValue =
+    document.getElementById("leftValue");
+
+const rightValue =
+    document.getElementById("rightValue");
+
+const midValue =
+    document.getElementById("midValue");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const progressText =
+    document.getElementById("progressText");
+
+const speedSlider =
+    document.getElementById("speedSlider");
+
+const speedValue =
+    document.getElementById("speedValue");
+
+speedSlider.addEventListener("input", function(){
+
+    animationSpeed =
+        2100 - parseInt(this.value);
+
+    if(this.value <= 300){
+
+        speedValue.innerText =
+            "Very Slow";
+    }
+
+    else if(this.value <= 700){
+
+        speedValue.innerText =
+            "Slow";
+    }
+
+    else if(this.value <= 1200){
+
+        speedValue.innerText =
+            "Normal";
+    }
+
+    else if(this.value <= 1700){
+
+        speedValue.innerText =
+            "Fast";
+    }
+
+    else{
+
+        speedValue.innerText =
+            "Very Fast";
+    }
+});
+
+let currentStep = 0;
+
+let interval = null;
+
+let nodesCreated = false;
+
+let comparisons = 0;
+
+let swaps = 0;
+
+let animationSpeed = 1000;
+
+function createInitialNodes(arr){
+
+    container.innerHTML = "";
+
+    arr.forEach((value,index) => {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "node-container";
+
+        wrapper.id =
+            "wrapper-" + index;
+
+        const node =
+            document.createElement("div");
+
+        node.className =
+            "node";
+
+        node.id =
+            "node-" + index;
+
+        node.innerText =
+            value;
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "index-label";
+
+        label.innerText =
+            index;
+
+        wrapper.appendChild(node);
+
+        wrapper.appendChild(label);
+
+        container.appendChild(wrapper);
+
+    });
+
+    nodesCreated = true;
+}
+
+function drawNodes(step){
+
+    if(!nodesCreated){
+
+        createInitialNodes(step.array);
+    }
+
+    const arr = step.array;
+
+    const previousStep =
+        currentStep > 0
+            ? steps[currentStep - 1]
+            : null;
+
+    let swappedIndices = [];
+
+    if(previousStep){
+
+        const previousArray =
+            previousStep.array;
+
+        for(let i = 0; i < arr.length; i++){
+
+            if(previousArray[i] !== arr[i]){
+
+                swappedIndices.push(i);
+            }
+        }
+    }
+
+    console.log(
+        "Swapped:",
+        swappedIndices
+    );
+
+    arrayDisplay.innerText = "[" + arr.join(", ") + "]";
+
+    const compare = step.compare;
+
+    const sorted = step.sorted;
+
+    if("{{ algorithm_type }}" === "search")
+    {
+
+        dynamicTitle.innerText =
+            "Search Result";
+
+
+        statsTitle.innerText =
+            "Search Statistics";
+
+
+        sortingStats.style.display =
+            "none";
+
+
+        searchStats.style.display =
+            "block";
+
+
+        if("{{ algorithm_name }}" === "Binary Search")
+        {
+
+            binaryInfo.style.display =
+                "block";
+
+
+            leftValue.innerText =
+                step.left;
+
+
+            rightValue.innerText =
+                step.right;
+
+
+            midValue.innerText =
+                step.mid;
+
+        }
+
+
+        else
+        {
+
+            binaryInfo.style.display =
+                "none";
+
+        }
+
+        if(step.found){
+
+            sortedCount.innerText =
+                "Found " +
+                step.target +
+                " at Index " +
+                step.result;
+
+            searchResult.innerText =
+                "Found at Index " +
+                step.result;
+
+        }
+        else if(currentStep === steps.length - 1){
+
+            sortedCount.innerText =
+                "Not Found";
+
+            searchResult.innerText =
+                "Not Found";
+
+        }
+        else{
+
+            sortedCount.innerText =
+                "Searching...";
+
+            searchResult.innerText =
+                "Searching";
+        }
+
+    }
+    else{
+
+        dynamicTitle.innerText =
+            "Sorted Elements";
+
+
+        sortedCount.innerText =
+            sorted.length +
+            " / " +
+            arr.length;
+
+    }
+
+    if(
+        "{{ algorithm_type }}" === "search" &&
+        step.found
+    )
+    {
+
+        statusText.innerText =
+            "Found " +
+            step.target;
+    }
+
+    arr.forEach((value,index) => {
+
+        const wrapper =
+            document.getElementById(
+                "wrapper-" + index
+            );
+
+        const node =
+            document.getElementById(
+                "node-" + index
+            );
+
+        node.innerText =
+            value;
+
+        node.style.background = "#3498db";
+
+        node.style.border = "4px solid transparent";
+
+        node.style.boxShadow =
+            "0 4px 10px rgba(0,0,0,0.2)";
+
+        node.style.transform = "none";
+
+        node.classList.remove("active-node");
+        node.classList.remove("binary-mid");
+
+        if(previousStep){
+
+            const previousArray =
+                previousStep.array;
+
+            if(swappedIndices.includes(index)){
+
+                node.style.background =
+                    "#e67e22";
+
+                node.style.boxShadow =
+                    "0 0 20px orange";
+
+                if(index === swappedIndices[0]){
+
+                    node.style.transform =
+                        "translateX(100px) scale(1.2)";
+                }
+
+                else if(index === swappedIndices[1]){
+
+                    node.style.transform =
+                        "translateX(-100px) scale(1.2)";
+                }
+            }
+        }
+
+        const label =
+            document.createElement("div");
+
+        label.className =
+            "index-label";
+
+        label.innerText =
+            index;
+
+        if(sorted.includes(index)){
+
+            node.style.border =
+                "4px solid green";
+        }
+
+        // Highlight current middle element
+    if (
+        algorithmName === "Binary Search" &&
+        step.mid === index
+    ){
+
+        node.classList.add("binary-mid");
+        node.classList.add("active-node");
+
+    }
+    else if(compare.includes(index)){
+
+        node.style.border = "4px solid red";
+        node.style.transform = "scale(1.1)";
+        node.classList.add("active-node");
+
+    }
+
+    });
+
+    if(compare.length >= 1 && currentStep > 0){
+
+
+    if("{{ algorithm_type }}" === "search")
+    {
+
+            comparisons++;
+
+            checkCount.innerText =
+                comparisons;
+
+        }
+
+        else{
+
+            comparisons++;
+
+            comparisonCount.innerText =
+                comparisons;
+
+        }
+
+        if(previousStep){
+
+            const previousArray =
+                previousStep.array;
+
+            let changed = false;
+
+            if(compare.length === 2){
+
+                changed =
+                    previousArray[compare[0]] !== arr[compare[0]] ||
+                    previousArray[compare[1]] !== arr[compare[1]];
+            }
+
+            if(changed){
+
+                swaps++;
+
+                swapCount.innerText =
+                    swaps;
+
+                statusText.innerText =
+                    "Swapping " +
+                    arr[compare[0]] +
+                    " and " +
+                    arr[compare[1]];
+            }
+            else{
+
+                if(compare.length === 1){
+
+                    statusText.innerText =
+                        "Checking " +
+                        arr[compare[0]];
+                }
+                else{
+
+                    statusText.innerText =
+                        "Comparing " +
+                        arr[compare[0]] +
+                        " and " +
+                        arr[compare[1]];
+                }
+            }
+        }
+    }
+    else{
+
+        if(step.found){
+
+            statusText.innerText =
+                "Found " +
+                step.target;
+
+        }
+        else if(currentStep === steps.length - 1){
+
+            statusText.innerText =
+                "Target Not Found";
+
+        }
+        else{
+
+            statusText.innerText =
+                "Current State";
+        }
+    }
+
+    stepCounter.innerText =
+        "Step: " + currentStep +
+        " / " + (steps.length - 1);
+
+    const activeNode =
+        document.querySelector(".active-node");
+
+    if(activeNode){
+
+        activeNode.scrollIntoView({
+
+            behavior: "smooth",
+
+            inline: "center",
+
+            block: "nearest"
+
+        });
+    }
+
+    let progress = Math.floor(
+        (currentStep / (steps.length - 1)) * 100
+    );
+
+    progressBar.style.width =
+        progress + "%";
+
+    progressText.innerText =
+        progress + "%";
+}
+
+drawNodes(steps[0]);
+
+function startVisualization(){
+
+    if(interval) return;
+
+    interval = setInterval(() => {
+
+        drawNodes(steps[currentStep]);
+
+        currentStep++;
+
+        if(currentStep >= steps.length){
+
+            clearInterval(interval);
+
+            interval = null;
+        }
+
+    },animationSpeed);
+}
+
+function pauseVisualization(){
+
+    clearInterval(interval);
+
+    interval = null;
+}
+
+function resetVisualization(){
+
+    pauseVisualization();
+
+    currentStep = 0;
+
+    comparisons = 0;
+
+    swaps = 0;
+
+    comparisonCount.innerText = 0;
+
+    swapCount.innerText = 0;
+
+    checkCount.innerText = 0;
+
+    leftValue.innerText = 0;
+    
+    rightValue.innerText = 0;
+
+    midValue.innerText = 0;
+
+    searchResult.innerText = "-";
+
+    progressBar.style.width = "0%";
+
+    progressText.innerText = "0%";
+
+    drawNodes(steps[0]);
+}
+
+const themeToggle =
+    document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+
+    if(
+        document.body.classList.contains(
+            "dark-mode"
+        )
+    ){
+
+        themeToggle.innerText =
+            "☀️ Light Mode";
+    }
+
+    else{
+
+        themeToggle.innerText =
+            "🌙 Dark Mode";
+    }
+
+});
+
+async function askAI(){
+
+
+let question =
+document.getElementById("userQuestion").value;
+
+
+let chat =
+document.getElementById("chatMessages");
+
+
+chat.innerHTML +=
+"<p>User: "+question+"</p>";
+
+
+
+let response =
+await fetch("/ask",{
+
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+
+body: JSON.stringify({
+
+    question: question,
+
+    algorithm: "{{ algorithm_name }}",
+
+    algorithm_type: "{{ algorithm_type }}",
+
+    current_step: currentStep,
+
+    total_steps: steps.length,
+
+    array: steps[currentStep].array,
+
+    compare: steps[currentStep].compare,
+
+    sorted: steps[currentStep].sorted,
+
+    comparisons: comparisons,
+
+    swaps: swaps,
+
+    progress: Math.floor(
+        currentStep * 100 / steps.length
+    ),
+
+    left: steps[currentStep].left,
+
+    right: steps[currentStep].right,
+
+    mid: steps[currentStep].mid,
+
+    target: steps[currentStep].target,
+
+    found: steps[currentStep].found
+
+})
+
+
+});
+
+
+
+let data =
+await response.json();
+
+chat.innerHTML +=
+"<p><b>AI:</b><br>"+data.answer.replace(/\n/g,"<br>")+"</p>";
+
+document.getElementById(
+"userQuestion"
+).value="";
+
+}
+
+</script>
+</body>
+</html>

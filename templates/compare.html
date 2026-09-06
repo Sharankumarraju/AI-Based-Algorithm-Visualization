@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Compare Algorithms</title>
+
+<style>
+
+body{
+
+    font-family:Arial;
+
+    background:#f4f4f4;
+
+    text-align:center;
+
+    padding:30px;
+
+}
+
+.container{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:10px;
+
+    width:700px;
+
+    margin:auto;
+
+    box-shadow:0 0 10px rgba(0,0,0,.2);
+
+}
+
+select,input{
+
+    padding:10px;
+
+    width:250px;
+
+    margin:10px;
+
+}
+
+button{
+
+    padding:12px 25px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Algorithm Comparison</h1>
+
+<form action="/compare_visualize" method="POST">
+
+<h3>Algorithm 1</h3>
+
+<select name="algo1" id="algo1" onchange="toggleTarget()" required>
+
+<option value="bubble">Bubble Sort</option>
+<option value="selection">Selection Sort</option>
+<option value="insertion">Insertion Sort</option>
+<option value="merge">Merge Sort</option>
+<option value="quick">Quick Sort</option>
+
+<option value="linear">Linear Search</option>
+<option value="binary">Binary Search</option>
+
+</select>
+
+<br>
+
+<h3>Algorithm 2</h3>
+
+<select name="algo2" id="algo2" onchange="toggleTarget()" required>
+
+<option value="bubble">Bubble Sort</option>
+<option value="selection">Selection Sort</option>
+<option value="insertion">Insertion Sort</option>
+<option value="merge">Merge Sort</option>
+<option value="quick">Quick Sort</option>
+
+<option value="linear">Linear Search</option>
+<option value="binary">Binary Search</option>
+
+</select>
+
+<br><br>
+
+<input
+type="text"
+name="numbers"
+placeholder="Example: 8 3 5 1 9"
+required
+>
+
+<div id="targetBox" style="display:none;">
+
+    <input
+    type="number"
+    name="target"
+    id="target"
+    placeholder="Search Target"
+    >
+
+</div>
+
+<button type="submit">
+Compare
+</button>
+
+</form>
+
+<br>
+
+<a href="/">← Back</a>
+
+</div>
+
+<script>
+
+const algo1 = document.getElementById("algo1");
+const algo2 = document.getElementById("algo2");
+
+function checkSearch(){
+
+    const searchAlgorithms = ["linear","binary"];
+
+    if(
+        searchAlgorithms.includes(algo1.value) ||
+        searchAlgorithms.includes(algo2.value)
+    ){
+
+        document.getElementById("targetSection").style.display = "block";
+
+    }
+
+    else{
+
+        document.getElementById("targetSection").style.display = "none";
+
+    }
+
+}
+
+algo1.addEventListener("change",checkSearch);
+algo2.addEventListener("change",checkSearch);
+
+</script>
+
+<script>
+
+function toggleTarget(){
+
+    const algo1 =
+        document.getElementById("algo1").value;
+
+    const algo2 =
+        document.getElementById("algo2").value;
+
+    if(
+        algo1 === "linear" ||
+        algo1 === "binary" ||
+        algo2 === "linear" ||
+        algo2 === "binary"
+    ){
+
+        document.getElementById("targetBox").style.display = "block";
+
+    }
+    else{
+
+        document.getElementById("targetBox").style.display = "none";
+
+    }
+
+}
+
+// Run once when page loads
+toggleTarget();
+
+</script>
+
+</body>
+
+</html>

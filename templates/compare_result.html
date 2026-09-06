@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Algorithm Comparison</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f4f4;
+            padding:25px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:25px;
+            color:#2c3e50;
+        }
+
+        .mainContainer{
+            display:flex;
+            justify-content:space-between;
+            gap:25px;
+        }
+
+        .panel{
+
+            width:50%;
+
+            background:white;
+
+            border-radius:10px;
+
+            padding:20px;
+
+            box-shadow:0 0 10px rgba(0,0,0,.15);
+
+        }
+
+        .panel h2{
+
+            text-align:center;
+
+            margin-bottom:20px;
+
+            color:#2c3e50;
+
+        }
+
+        .stats{
+
+            display:grid;
+
+            grid-template-columns:repeat(2,1fr);
+
+            gap:10px;
+
+            margin-bottom:20px;
+
+        }
+
+        .statBox{
+
+            background:#f8f9fa;
+
+            padding:10px;
+
+            border-radius:8px;
+
+            text-align:center;
+
+        }
+
+        .progressContainer{
+
+            width:100%;
+
+            height:20px;
+
+            background:#ddd;
+
+            border-radius:20px;
+
+            overflow:hidden;
+
+            margin:15px 0;
+
+        }
+
+        .progressBar{
+
+            width:0%;
+
+            height:100%;
+
+            background:#27ae60;
+
+            transition:.4s;
+
+        }
+
+        .arrayContainer{
+
+            overflow-x:auto;
+
+            margin-top:20px;
+
+        }
+
+        .nodes{
+
+            display:flex;
+
+            justify-content:flex-start;
+
+            gap:20px;
+
+            min-height:130px;
+
+            min-width:max-content;
+
+            align-items:center;
+
+        }
+
+        .nodeWrapper{
+
+            display:flex;
+
+            flex-direction:column;
+
+            align-items:center;
+
+        }
+
+        .node{
+
+            width:70px;
+
+            height:70px;
+
+            border-radius:50%;
+
+            background:#3498db;
+
+            color:white;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            font-size:22px;
+
+            font-weight:bold;
+
+            border:4px solid transparent;
+
+            transition:.4s;
+
+        }
+
+        .index{
+
+            margin-top:8px;
+
+            font-weight:bold;
+
+        }
+
+        .compare{
+
+            border:4px solid red !important;
+
+            transform:scale(1.1);
+
+        }
+
+        .sorted{
+
+            border:4px solid green !important;
+
+        }
+
+        .controls{
+
+            margin-top:25px;
+
+            text-align:center;
+
+        }
+
+        button{
+
+            padding:10px 18px;
+
+            margin:5px;
+
+            border:none;
+
+            border-radius:6px;
+
+            background:#2c3e50;
+
+            color:white;
+
+            cursor:pointer;
+
+        }
+
+        button:hover{
+
+            background:#34495e;
+
+        }
+
+        input[type=range]{
+
+            width:220px;
+
+        }
+
+        .back{
+
+            margin-top:30px;
+
+            text-align:center;
+
+        }
+
+        a{
+
+            text-decoration:none;
+
+            font-weight:bold;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h1>Algorithm Comparison</h1>
+
+<div class="mainContainer">
+
+    <!-- LEFT PANEL -->
+
+    <div class="panel">
+
+        <h2>{{ algorithm1 }}</h2>
+
+        <div class="stats">
+
+            <div class="statBox">
+
+                <b>Step</b>
+
+                <p id="step1">0</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Progress</b>
+
+                <p id="progressText1">0%</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Comparisons</b>
+
+                <p id="compareCount1">0</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Swaps</b>
+
+                <p id="swapCount1">0</p>
+
+            </div>
+
+        </div>
+
+        <div class="progressContainer">
+
+            <div
+                id="progress1"
+                class="progressBar">
+            </div>
+
+        </div>
+
+        <div class="arrayContainer">
+
+            <div
+                id="leftPanel"
+                class="nodes">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT PANEL -->
+
+    <div class="panel">
+
+        <h2>{{ algorithm2 }}</h2>
+
+        <div class="stats">
+
+            <div class="statBox">
+
+                <b>Step</b>
+
+                <p id="step2">0</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Progress</b>
+
+                <p id="progressText2">0%</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Comparisons</b>
+
+                <p id="compareCount2">0</p>
+
+            </div>
+
+            <div class="statBox">
+
+                <b>Swaps</b>
+
+                <p id="swapCount2">0</p>
+
+            </div>
+
+        </div>
+
+        <div class="progressContainer">
+
+            <div
+                id="progress2"
+                class="progressBar">
+            </div>
+
+        </div>
+
+        <div class="arrayContainer">
+
+            <div
+                id="rightPanel"
+                class="nodes">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="controls">
+
+    <button onclick="startComparison()">
+        Start
+    </button>
+
+    <button onclick="pauseComparison()">
+        Pause
+    </button>
+
+    <button onclick="resetComparison()">
+        Reset
+    </button>
+
+    <br><br>
+
+    <label>
+
+        Animation Speed
+
+    </label>
+
+    <br><br>
+
+    <input
+        type="range"
+        id="speedSlider"
+        min="200"
+        max="2000"
+        value="1000"
+    >
+
+</div>
+
+<div
+    id="summaryBox"
+    style="
+        display:none;
+        margin:30px auto;
+        max-width:900px;
+        background:white;
+        padding:25px;
+        border-radius:10px;
+        box-shadow:0 0 10px rgba(0,0,0,.15);
+        text-align:left;
+    "
+>
+
+<h2 style="text-align:center;">
+Comparison Summary
+</h2>
+
+<div id="summaryContent"></div>
+
+</div>
+
+<div class="back">
+
+    <a href="/">
+        ← Back
+    </a>
+
+</div>
+
+<script>
+
+const steps1 = {{ steps1|tojson|safe }};
+const steps2 = {{ steps2|tojson|safe }};
+
+let current1 = 0;
+let current2 = 0;
+
+let comparisons1 = 0;
+let comparisons2 = 0;
+
+let swaps1 = 0;
+let swaps2 = 0;
+
+let animationSpeed = 1000;
+
+let timer = null;
+
+function createInitialPanel(panelId, step){
+
+    const panel = document.getElementById(panelId);
+
+    panel.innerHTML = "";
+
+    step.array.forEach((value,index)=>{
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "nodeWrapper";
+        wrapper.id = panelId + "-wrapper-" + index;
+
+        const node = document.createElement("div");
+        node.className = "node";
+        node.id = panelId + "-node-" + index;
+        node.innerText = value;
+
+        const label = document.createElement("div");
+        label.className = "index";
+        label.innerText = index;
+
+        wrapper.appendChild(node);
+        wrapper.appendChild(label);
+
+        panel.appendChild(wrapper);
+
+    });
+
+}
+
+function updatePanel(panelId, step, previousStep){
+
+    step.array.forEach((value,index)=>{
+
+        const node =
+            document.getElementById(panelId + "-node-" + index);
+
+        node.innerText = value;
+
+        node.classList.remove("compare");
+        node.classList.remove("sorted");
+
+        node.style.transform = "none";
+        node.style.boxShadow = "";
+        node.style.background = "#3498db";
+
+        if(step.compare &&
+           step.compare.includes(index)){
+
+            node.classList.add("compare");
+
+        }
+
+        if(step.sorted &&
+           step.sorted.includes(index)){
+
+            node.classList.add("sorted");
+
+        }
+
+        if(previousStep){
+
+            if(previousStep.array[index] != step.array[index]){
+
+                node.style.background = "#e67e22";
+
+                node.style.boxShadow =
+                    "0 0 15px orange";
+
+                node.style.transform =
+                    "scale(1.18)";
+
+            }
+
+        }
+
+    });
+
+}
+
+function updateLeft(){
+
+    const step = steps1[current1];
+
+    const previousStep =
+        current1 > 0 ? steps1[current1-1] : null;
+
+    updatePanel(
+        "leftPanel",
+        step,
+        previousStep
+    );
+
+    document.getElementById("step1").innerText =
+        current1 + " / " + (steps1.length-1);
+
+    let progress =
+        Math.floor(current1*100/(steps1.length-1));
+
+    document.getElementById("progress1").style.width =
+        progress + "%";
+
+    document.getElementById("progressText1").innerText =
+        progress + "%";
+
+    if(current1>0){
+
+        comparisons1++;
+
+        document.getElementById("compareCount1").innerText =
+            comparisons1;
+
+        if(
+            JSON.stringify(previousStep.array) !==
+            JSON.stringify(step.array)
+        ){
+
+            swaps1++;
+
+            document.getElementById("swapCount1").innerText =
+                swaps1;
+
+        }
+
+    }
+
+}
+
+function updateRight(){
+
+    const step = steps2[current2];
+
+    const previousStep =
+        current2 > 0 ? steps2[current2-1] : null;
+
+    updatePanel(
+        "rightPanel",
+        step,
+        previousStep
+    );
+
+    document.getElementById("step2").innerText =
+        current2 + " / " + (steps2.length-1);
+
+    let progress =
+        Math.floor(current2*100/(steps2.length-1));
+
+    document.getElementById("progress2").style.width =
+        progress + "%";
+
+    document.getElementById("progressText2").innerText =
+        progress + "%";
+
+    if(current2>0){
+
+        comparisons2++;
+
+        document.getElementById("compareCount2").innerText =
+            comparisons2;
+
+        if(
+            JSON.stringify(previousStep.array) !==
+            JSON.stringify(step.array)
+        ){
+
+            swaps2++;
+
+            document.getElementById("swapCount2").innerText =
+                swaps2;
+
+        }
+
+    }
+
+}
+
+createInitialPanel("leftPanel", steps1[0]);
+createInitialPanel("rightPanel", steps2[0]);
+
+updateLeft();
+updateRight();
+
+document
+.getElementById("speedSlider")
+.addEventListener("input",function(){
+
+    animationSpeed =
+        2200-parseInt(this.value);
+
+    if(timer){
+
+        pauseComparison();
+
+        startComparison();
+
+    }
+
+});
+
+function showSummary(){
+
+    let winner = "";
+
+    let reason = [];
+
+    if(comparisons1 < comparisons2){
+
+        reason.push("Fewer Comparisons");
+
+    }
+    else if(comparisons2 < comparisons1){
+
+        winner = "{{ algorithm2 }}";
+
+        reason.push("Fewer Comparisons");
+
+    }
+
+    if(swaps1 < swaps2){
+
+        if(winner === "")
+            winner = "{{ algorithm1 }}";
+
+        reason.push("Fewer Swaps");
+
+    }
+    else if(swaps2 < swaps1){
+
+        if(winner === "")
+            winner = "{{ algorithm2 }}";
+
+        reason.push("Fewer Swaps");
+
+    }
+
+    if(steps1.length < steps2.length){
+
+        if(winner === "")
+            winner = "{{ algorithm1 }}";
+
+        reason.push("Finished in fewer steps");
+
+    }
+    else if(steps2.length < steps1.length){
+
+        if(winner === "")
+            winner = "{{ algorithm2 }}";
+
+        reason.push("Finished in fewer steps");
+
+    }
+
+    if(winner === ""){
+
+        winner = "Tie";
+
+        reason = ["Both algorithms performed similarly for this input."];
+
+    }
+
+    document.getElementById("summaryBox").style.display = "block";
+
+    document.getElementById("summaryContent").innerHTML = `
+
+        <h3>{{ algorithm1 }}</h3>
+
+        <p><b>Steps:</b> ${steps1.length-1}</p>
+
+        <p><b>Comparisons:</b> ${comparisons1}</p>
+
+        <p><b>Swaps:</b> ${swaps1}</p>
+
+        <hr>
+
+        <h3>{{ algorithm2 }}</h3>
+
+        <p><b>Steps:</b> ${steps2.length-1}</p>
+
+        <p><b>Comparisons:</b> ${comparisons2}</p>
+
+        <p><b>Swaps:</b> ${swaps2}</p>
+
+        <hr>
+
+        <h2 style="color:green;">
+            Winner : ${winner}
+        </h2>
+
+        <p>
+
+            <b>Reason:</b>
+
+            ${reason.join(", ")}
+
+        </p>
+
+    `;
+
+}
+
+function startComparison(){
+
+    if(timer) return;
+
+    timer = setInterval(function(){
+
+        if(current1 < steps1.length-1){
+
+            current1++;
+            updateLeft();
+
+        }
+
+        if(current2 < steps2.length-1){
+
+            current2++;
+            updateRight();
+
+        }
+
+        if(
+            current1 >= steps1.length-1 &&
+            current2 >= steps2.length-1
+        ){
+
+            clearInterval(timer);
+
+            timer = null;
+
+            showSummary();
+
+        }
+
+    }, animationSpeed);
+
+}
+
+function pauseComparison(){
+
+    clearInterval(timer);
+    timer = null;
+
+}
+
+function resetComparison(){
+
+    pauseComparison();
+
+    current1 = 0;
+    current2 = 0;
+
+    comparisons1 = 0;
+    comparisons2 = 0;
+
+    swaps1 = 0;
+    swaps2 = 0;
+
+    document.getElementById("compareCount1").innerText = 0;
+    document.getElementById("compareCount2").innerText = 0;
+
+    document.getElementById("swapCount1").innerText = 0;
+    document.getElementById("swapCount2").innerText = 0;
+
+    document.getElementById("progress1").style.width = "0%";
+    document.getElementById("progress2").style.width = "0%";
+
+    document.getElementById("progressText1").innerText = "0%";
+    document.getElementById("progressText2").innerText = "0%";
+
+    updateLeft();
+    updateRight();
+
+    document.getElementById("summaryBox").style.display = "none";
+
+}
+
+</script>
+
+</body>
+
+</html>
