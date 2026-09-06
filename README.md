@@ -76,6 +76,8 @@ mini project/
 ├── .gitignore
 └── README.md
 ```
+> **Note:** The `.env` file and Python cache files such as `__pycache__` are excluded from the repository using `.gitignore`.
+
 ## 👥 Team
 
 This project was developed as a team by:
